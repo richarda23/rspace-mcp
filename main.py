@@ -1,4 +1,4 @@
-from typing import Annotated, Dict
+from typing import Annotated, Dict, List
 
 from fastmcp import FastMCP
 from rspace_client.eln import eln as e
@@ -54,7 +54,7 @@ def get_document(doc_id: int | str) -> FullDocument:
     Gets a single RSpace document by its numeric id or string globalId
     """
     resp = eln_cli.get_document(doc_id)
-    resp['content']=''
+    resp['content'] = ''
     for fld in resp['fields']:
         resp['content'] = resp['content'] + fld['content']
     return resp
@@ -63,7 +63,7 @@ def get_document(doc_id: int | str) -> FullDocument:
 @mcp.tool(tags={"rspace"}, name="createNewNotebook")
 def create_notebook(
         name: Annotated[str, Field(description="The name of the notebook to create")],
-    ) -> Dict[str, any]:
+) -> Dict[str, any]:
     """
     Creates a new RSpace notebook
     """
@@ -76,11 +76,26 @@ def create_notebook_entry(
         name: Annotated[str, Field(description="The name of the notebook entry")],
         text_content: Annotated[str, Field(description="html or plain text content ")],
         notebook_id: Annotated[int, Field(description="The id of the notebook to add the entry")],
-     ) -> Dict[str, any]:
+) -> Dict[str, any]:
     """
     Adds content as a new notebook entry in an existing notebook
     """
     resp = eln_cli.create_document(name, parent_folder_id=notebook_id, fields=[{'content': text_content}])
+    return resp
+
+
+@mcp.tool(tags={"rspace"}, name="tagDocumentOrNotebookEntry")
+def tag_document(
+        doc_id: int | str,
+        tags: Annotated[List[str], Field(description="One or more tags in a list")]
+) -> Dict[str, any]:
+    """
+    Tags a document or notebook entry with one or more tags
+    :param doc_id:
+    :param tags:
+    :return:
+    """
+    resp = eln_cli.update_document(document_id=doc_id, tags=tags)
     return resp
 
 
