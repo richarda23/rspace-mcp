@@ -99,5 +99,38 @@ def tag_document(
     return resp
 
 
+@mcp.tool(tags={"rspace"}, name="renameDocumentOrNotebookEntry")
+def rename_document(
+        doc_id: int | str,
+        name: str
+) -> Dict[str, any]:
+    """
+    Renames a document or notebook entry
+    :param doc_id:
+    :param name: the new name
+    :return:
+    """
+    resp = eln_cli.update_document(document_id=doc_id, name=name)
+    return resp
+
+
+@mcp.tool(tags={"rspace"}, name="getAuditEvents")
+def activity(
+        username: str = None,
+        global_id: str = None,
+        date_from: str = None,
+        date_to: str = None
+) -> Dict[str, any]:
+    """
+    Gets audit trail of all actions performed in RSpace. Optionally can filter by:
+     - username(s)
+     - a single document id
+     - a date from in ISO8601 format
+     - a date to in ISO8601 format
+    """
+    resp = eln_cli.get_activity(users=[username], global_id=global_id, date_from=date_from, date_to=date_to)
+    return resp
+
+
 if __name__ == "__main__":
     mcp.run()
