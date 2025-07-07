@@ -132,5 +132,18 @@ def activity(
     return resp
 
 
+@mcp.tool(tags={"rspace"}, name="downloadFile")
+def download_file(
+        file_id: int,
+        file_path:str
+) -> Dict[str, any]:
+    """
+    Get the file contents given a file id, and a file-system location to save to
+
+    """
+    resp = eln_cli.download_file(file_id=file_id, filename=file_path, chunk_size=1024)
+    return resp
+
+
 if __name__ == "__main__":
     mcp.run()
