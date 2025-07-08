@@ -1,6 +1,6 @@
 # RSpace MCP server
 
-Exposes some RSpace API endpoints to LLM agents
+This is a proof-of-principle MCP server for RSpace. It exposes some RSpace API endpoints to LLM agents using the Model Context Protocol.
 
 To run,[ install `uv`](https://docs.astral.sh/uv/#highlights) and `python`, then add this to your Claude or VS Code mcp.json
 
