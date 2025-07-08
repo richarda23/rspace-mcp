@@ -47,3 +47,5 @@ For Claude Desktop  add the "rspace" server definition below to your MCP config 
   }
 }
 ```
+
+
