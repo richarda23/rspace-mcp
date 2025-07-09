@@ -551,5 +551,18 @@ def get_recent_samples_summary(days_back: int = 7, page_size: int = 10) -> list:
     """Get just basic info about recent samples, not full details"""
     # Use pagination and date filtering to get minimal data
 
+@mcp.tool(tags={"rspace"}, name="downloadFile")
+def download_file(
+        file_id: int,
+        file_path:str
+) -> Dict[str, any]:
+    """
+    Get the file contents given a file id, and a file-system location to save to
+
+    """
+    resp = eln_cli.download_file(file_id=file_id, filename=file_path, chunk_size=1024)
+    return resp
+
+
 if __name__ == "__main__":
     mcp.run()
