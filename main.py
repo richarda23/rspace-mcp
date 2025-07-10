@@ -250,6 +250,33 @@ def activity(
     resp = eln_cli.get_activity(users=[username], global_id=global_id, date_from=date_from, date_to=date_to)
     return resp
 
+@mcp.tool(tags={"rspace"})
+def update_document(
+    document_id: int | str,
+    name: str = None,
+    tags: List[str] = None,
+    form_id: int | str = None,
+    fields: List[dict] = None
+) -> dict:
+    """
+    Updates an existing RSpace document
+    
+    Fields should be a list of dictionaries with structure:
+    [
+        {
+            "id": field_id,  # The field ID to update
+            "content": "new content"  # The new HTML content
+        }
+    ]
+    """
+    return eln_cli.update_document(
+        document_id=document_id,
+        name=name,
+        tags=tags,
+        form_id=form_id,
+        fields=fields
+    )
+
 # ====== INVENTORY TOOLS (new) ======
 
 # Sample Management
