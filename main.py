@@ -1,6 +1,7 @@
+import time
 from typing import Annotated, Dict, List
 
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from rspace_client.eln import eln as e
 import os
 from dotenv import load_dotenv
@@ -38,7 +39,7 @@ def status() -> str:
 
 
 @mcp.tool(tags={"rspace"})
-def get_documents(page_size: int = 20) -> list[Document]:
+def get_documents(context: Context, page_size: int = 20) -> list[Document]:
     """
     Gets most recent  RSpace documents up to 100 at a time
     """
@@ -46,6 +47,16 @@ def get_documents(page_size: int = 20) -> list[Document]:
         raise ValueError("page size must be less than 200")
     resp = eln_cli.get_documents(page_size=page_size)
     return resp['documents']
+
+
+@mcp.prompt()
+def literature_search(topic: str, result_count: int = 5) -> str:
+    """Performs a literature review using pubmed on the given topic"""
+    return f"Please do  a literature search on the following topic: {topic}. Search PubMed if possible, else do a " \
+           f"general internet search. Then, select {result_count} best " \
+           "results, and return the abstracts, along with author contact detail. Then save the results in an RSpace " \
+           "notebook, creating one entry per article. When saving the text, convert the text to simple HTML, " \
+           "including links, bullets and  text formatting. "
 
 
 @mcp.tool(tags={"rspace"}, name="get_single_Rspace_document")
@@ -135,7 +146,7 @@ def activity(
 @mcp.tool(tags={"rspace"}, name="downloadFile")
 def download_file(
         file_id: int,
-        file_path:str
+        file_path: str
 ) -> Dict[str, any]:
     """
     Get the file contents given a file id, and a file-system location to save to
